@@ -67,7 +67,7 @@ return FocusableControlBuilder(
 );
 ```
 
-### Request focus on press
+### Request Focus On Press
 
 `FocusableControlBuilder` will assume you want your control to request focus when it is pressed. To disable, just set this to false:
 ```
