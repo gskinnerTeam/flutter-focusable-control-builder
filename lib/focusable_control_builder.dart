@@ -23,10 +23,8 @@ class FocusableControlBuilder extends StatefulWidget {
   /// Return a widget representing the control based on the current [FocusableControlState]
   final Widget Function(BuildContext context, FocusableControlState control) builder;
 
-  /// Default onPressed handler. Will not be called if a custom gestureBuilder is used.
   final VoidCallback? onPressed;
 
-  /// Default onLongPressed handler. Will not be called if a custom gestureBuilder is used.
   final VoidCallback? onLongPressed;
 
   /// Called after the hover state has changed.
