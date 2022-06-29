@@ -48,10 +48,10 @@ class FocusableControlBuilder extends StatefulWidget {
   /// Use a custom cursor. By default, [SystemMouseCursors.click] is used.
   final SystemMouseCursor? cursor;
 
-  /// Optional: Provide a set of actions which will be passed to the [FocusableActionDetector]
+  /// Optional. Passed to the [FocusableActionDetector]. Defines a set of actions which can bind to shortcuts.
   final Map<Type, Action<Intent>>? actions;
 
-  /// Optional: Provide a set of shortcuts which will be passed to the [FocusableActionDetector]
+  /// Optional. Passed to the [FocusableActionDetector]. Defines a set of shortcuts, that will trigger associated actions.
   final Map<ShortcutActivator, Intent>? shortcuts;
 
   /// Passed along to the [GestureDetector] that handles onPress and onLongPress
