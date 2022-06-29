@@ -2,6 +2,8 @@ import 'package:example/custom_button.dart';
 import 'package:example/custom_checkbox.dart';
 import 'package:flutter/material.dart';
 
+//TODO: Add tests for additional properties added in 1.0 (enabled, semantics, longPress, etc)
+
 void main() {
   runApp(const MyApp());
 }
