@@ -18,6 +18,9 @@ class FocusableControlBuilder extends StatefulWidget {
     this.actions,
     this.shortcuts,
     this.hitTestBehavior,
+    this.autoFocus = false,
+    this.descendantsAreFocusable = true,
+    this.descendantsAreTraversable = true,
   }) : super(key: key);
 
   /// Return a widget representing the control based on the current [FocusableControlState]
@@ -51,8 +54,17 @@ class FocusableControlBuilder extends StatefulWidget {
   /// Optional: Provide a set of shortcuts which will be passed to the [FocusableActionDetector]
   final Map<ShortcutActivator, Intent>? shortcuts;
 
-  /// Passed along to the gesture detector that handles onPress and onLongPress
+  /// Passed along to the [GestureDetector] that handles onPress and onLongPress
   final HitTestBehavior? hitTestBehavior;
+
+  /// Passed along to the [FocusableActionDetector]
+  final bool autoFocus;
+
+  /// Passed along to the [FocusableActionDetector]
+  final bool descendantsAreFocusable;
+
+  /// Passed along to the [FocusableActionDetector]
+  final bool descendantsAreTraversable;
 
   @override
   State<FocusableControlBuilder> createState() => FocusableControlState();
@@ -77,7 +89,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   void _handleFocusChanged(v) {
     setState(() => _isFocused = v);
-    widget.onHoverChanged?.call(context, this);
+    widget.onFocusChanged?.call(context, this);
   }
 
   void _handlePressed() {
@@ -109,6 +121,10 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     Widget content = FocusableActionDetector(
       enabled: widget.enabled,
       focusNode: _focusNode,
+      autofocus: widget.autoFocus,
+      descendantsAreFocusable: widget.descendantsAreFocusable,
+      descendantsAreTraversable: widget.descendantsAreTraversable,
+      onFocusChange: _handleFocusChanged,
       onShowFocusHighlight: _handleFocusChanged,
       onShowHoverHighlight: _handleHoverChanged,
       shortcuts: widget.shortcuts,
