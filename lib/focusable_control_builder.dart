@@ -8,18 +8,53 @@ class FocusableControlBuilder extends StatefulWidget {
     Key? key,
     required this.builder,
     this.onPressed,
+    this.onLongPressed,
+    this.onHoverChanged,
+    this.onFocusChanged,
+    this.semanticButtonLabel,
+    this.enabled = true,
     this.requestFocusOnPress = true,
     this.cursor,
     this.actions,
     this.shortcuts,
+    this.hitTestBehavior,
   }) : super(key: key);
 
+  /// Return a widget representing the control based on the current [FocusableControlState]
   final Widget Function(BuildContext context, FocusableControlState control) builder;
+
+  /// Default onPressed handler. Will not be called if a custom gestureBuilder is used.
   final VoidCallback? onPressed;
+
+  /// Default onLongPressed handler. Will not be called if a custom gestureBuilder is used.
+  final VoidCallback? onLongPressed;
+
+  /// Called after the hover state has changed.
+  final Widget Function(BuildContext context, FocusableControlState control)? onHoverChanged;
+
+  /// Called after the focus state has changed.
+  final Widget Function(BuildContext context, FocusableControlState control)? onFocusChanged;
+
+  /// Optional: If not null, the control will be marked as a semantic button and given a label.
+  final String? semanticButtonLabel;
+
+  /// Passed to [FocusableActionDetector]. Controls whether this widget will accept focus or input of any kind.
+  final bool enabled;
+
+  /// Whether this control should request focus when it is pressed, defaults to true.
   final bool requestFocusOnPress;
+
+  /// Use a custom cursor. By default, [SystemMouseCursors.click] is used.
   final SystemMouseCursor? cursor;
+
+  /// Optional: Provide a set of actions which will be passed to the [FocusableActionDetector]
   final Map<Type, Action<Intent>>? actions;
+
+  /// Optional: Provide a set of shortcuts which will be passed to the [FocusableActionDetector]
   final Map<ShortcutActivator, Intent>? shortcuts;
+
+  /// Passed along to the gesture detector that handles onPress and onLongPress
+  final HitTestBehavior? hitTestBehavior;
 
   @override
   State<FocusableControlBuilder> createState() => FocusableControlState();
@@ -37,25 +72,14 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   bool get hasPressHandler => widget.onPressed != null;
 
-  @override
-  Widget build(BuildContext context) {
-    MouseCursor defaultCursor = hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
-    MouseCursor cursor = widget.cursor ?? defaultCursor;
-    return GestureDetector(
-      onTap: _handlePressed,
-      child: FocusableActionDetector(
-        focusNode: _focusNode,
-        onShowFocusHighlight: (v) => setState(() => _isFocused = v),
-        onShowHoverHighlight: (v) => setState(() => _isHovered = v),
-        actions: {
-          if (hasPressHandler) ActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
-          ...(widget.actions ?? {}),
-        },
-        shortcuts: widget.shortcuts,
-        mouseCursor: cursor,
-        child: widget.builder(context, this),
-      ),
-    );
+  void _handleHoverChanged(v) {
+    setState(() => _isHovered = v);
+    widget.onHoverChanged?.call(context, this);
+  }
+
+  void _handleFocusChanged(v) {
+    setState(() => _isFocused = v);
+    widget.onHoverChanged?.call(context, this);
   }
 
   void _handlePressed() {
@@ -64,5 +88,52 @@ class FocusableControlState extends State<FocusableControlBuilder> {
       _focusNode.requestFocus();
     }
     widget.onPressed?.call();
+  }
+
+  /// By default, will bind the [ActivateIntent] from the flutter SDK to the onPressed callback.
+  /// This will enable SPACE and ENTER keys on most platforms.
+  /// Also accepts additional actions provided externally.
+  Map<Type, Action<Intent>> _getKeyboardActions() {
+    return {
+      if (hasPressHandler) ...{
+        ActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
+      },
+      ...(widget.actions ?? {}),
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    MouseCursor defaultCursor = hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
+    MouseCursor cursor = widget.cursor ?? defaultCursor;
+
+    // Create the core FocusableActionDetector
+    Widget content = FocusableActionDetector(
+      enabled: widget.enabled,
+      focusNode: _focusNode,
+      onShowFocusHighlight: _handleFocusChanged,
+      onShowHoverHighlight: _handleHoverChanged,
+      shortcuts: widget.shortcuts,
+      mouseCursor: cursor,
+      actions: _getKeyboardActions(),
+      child: widget.builder(context, this),
+    );
+
+    // Wrap semantics
+    if (widget.semanticButtonLabel != null) {
+      content = Semantics(
+        button: true,
+        label: widget.semanticButtonLabel,
+        child: content,
+      );
+    }
+
+    // Wrap gestures
+    return GestureDetector(
+      behavior: widget.hitTestBehavior,
+      onTap: _handlePressed,
+      onLongPress: widget.onLongPressed,
+      child: content,
+    );
   }
 }
