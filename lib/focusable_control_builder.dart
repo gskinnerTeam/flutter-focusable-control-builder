@@ -31,10 +31,10 @@ class FocusableControlBuilder extends StatefulWidget {
   final VoidCallback? onLongPressed;
 
   /// Called after the hover state has changed.
-  final Widget Function(BuildContext context, FocusableControlState control)? onHoverChanged;
+  final void Function(BuildContext context, FocusableControlState control)? onHoverChanged;
 
   /// Called after the focus state has changed.
-  final Widget Function(BuildContext context, FocusableControlState control)? onFocusChanged;
+  final void Function(BuildContext context, FocusableControlState control)? onFocusChanged;
 
   /// Optional: If not null, the control will be marked as a semantic button and given a label.
   final String? semanticButtonLabel;
