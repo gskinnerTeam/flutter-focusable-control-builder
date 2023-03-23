@@ -26,8 +26,10 @@ class FocusableControlBuilder extends StatefulWidget {
   /// Return a widget representing the control based on the current [FocusableControlState]
   final Widget Function(BuildContext context, FocusableControlState control) builder;
 
+  /// Called when the control is pressed.
   final VoidCallback? onPressed;
 
+  /// Called when the control is long pressed.
   final VoidCallback? onLongPressed;
 
   /// Called after the hover state has changed.
@@ -70,6 +72,8 @@ class FocusableControlBuilder extends StatefulWidget {
   State<FocusableControlBuilder> createState() => FocusableControlState();
 }
 
+/// The state of a [FocusableControlBuilder] widget.
+/// This is passed to the builder function, and can be used to determine the current state of the control.
 class FocusableControlState extends State<FocusableControlBuilder> {
   final FocusNode _focusNode = FocusNode();
   FocusNode get focusNode => _focusNode;
@@ -82,9 +86,13 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   bool get hasPressHandler => widget.onPressed != null;
 
+  bool _wasHovered = false;
+  bool get wasHovered => _wasHovered;
+
   void _handleHoverChanged(v) {
     setState(() => _isHovered = v);
     widget.onHoverChanged?.call(context, this);
+    _wasHovered = v;
   }
 
   void _handleFocusChanged(v) {
