@@ -1,5 +1,6 @@
-## 1.0.1
+## 1.0.1+1
 * Add wasPressed
+* Add wasFocused
 
 ## 1.0.0
 * Add onLongPress

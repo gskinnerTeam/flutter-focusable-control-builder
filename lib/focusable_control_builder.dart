@@ -89,6 +89,9 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   bool _wasHovered = false;
   bool get wasHovered => _wasHovered;
 
+  bool _wasFocused = false;
+  bool get wasFocused => _wasFocused;
+
   void _handleHoverChanged(v) {
     setState(() => _isHovered = v);
     widget.onHoverChanged?.call(context, this);
@@ -98,6 +101,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   void _handleFocusChanged(v) {
     setState(() => _isFocused = v);
     widget.onFocusChanged?.call(context, this);
+    _wasFocused = v;
   }
 
   void _handlePressed() {
