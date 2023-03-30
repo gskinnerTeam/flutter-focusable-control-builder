@@ -43,7 +43,7 @@ class _CustomButtonsAndCheckboxesDemoState extends State<CustomButtonsAndCheckbo
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomButton("Button 1", onPressed: () => debugPrint("Click1")),
+              const CustomButton("Button 1"),
               CustomButton("Button 2", onPressed: () => debugPrint("Click2")),
               CustomButton("Button 3", onPressed: () => debugPrint("Click3")),
             ],
@@ -56,4 +56,6 @@ class _CustomButtonsAndCheckboxesDemoState extends State<CustomButtonsAndCheckbo
       ),
     );
   }
+
+
 }
