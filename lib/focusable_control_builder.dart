@@ -105,7 +105,6 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   }
 
   void _handlePressed() {
-    if (widget.onPressed == null) return;
     if (widget.requestFocusOnPress) {
       _focusNode.requestFocus();
     }
@@ -157,7 +156,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     // Wrap gestures
     return GestureDetector(
       behavior: widget.hitTestBehavior,
-      onTap: _handlePressed,
+      onTap: widget.onPressed == null ? null :_handlePressed,
       onLongPress: widget.onLongPressed,
       child: content,
     );
