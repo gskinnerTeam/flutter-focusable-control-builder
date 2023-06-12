@@ -1,4 +1,4 @@
-## NEXT
+## 1.0.2
 * fix can not click on parent when onPress null
 * Stop FocusNodes leaking.
 
