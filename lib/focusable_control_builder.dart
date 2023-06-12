@@ -24,8 +24,7 @@ class FocusableControlBuilder extends StatefulWidget {
   }) : super(key: key);
 
   /// Return a widget representing the control based on the current [FocusableControlState]
-  final Widget Function(BuildContext context, FocusableControlState control)
-      builder;
+  final Widget Function(BuildContext context, FocusableControlState control) builder;
 
   /// Called when the control is pressed.
   final VoidCallback? onPressed;
@@ -34,12 +33,10 @@ class FocusableControlBuilder extends StatefulWidget {
   final VoidCallback? onLongPressed;
 
   /// Called after the hover state has changed.
-  final void Function(BuildContext context, FocusableControlState control)?
-      onHoverChanged;
+  final void Function(BuildContext context, FocusableControlState control)? onHoverChanged;
 
   /// Called after the focus state has changed.
-  final void Function(BuildContext context, FocusableControlState control)?
-      onFocusChanged;
+  final void Function(BuildContext context, FocusableControlState control)? onFocusChanged;
 
   /// Optional: If not null, the control will be marked as a semantic button and given a label.
   final String? semanticButtonLabel;
@@ -110,6 +107,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   void _handleFocusChanged(v) {
     setState(() => _isFocused = v);
     widget.onFocusChanged?.call(context, this);
+
     _wasFocused = v;
   }
 
@@ -126,8 +124,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   Map<Type, Action<Intent>> _getKeyboardActions() {
     return {
       if (hasPressHandler) ...{
-        ActivateIntent:
-            CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
+        ActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
       },
       ...(widget.actions ?? {}),
     };
@@ -135,8 +132,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    MouseCursor defaultCursor =
-        hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
+    MouseCursor defaultCursor = hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
     MouseCursor cursor = widget.cursor ?? defaultCursor;
 
     // Create the core FocusableActionDetector
