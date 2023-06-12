@@ -24,7 +24,8 @@ class FocusableControlBuilder extends StatefulWidget {
   }) : super(key: key);
 
   /// Return a widget representing the control based on the current [FocusableControlState]
-  final Widget Function(BuildContext context, FocusableControlState control) builder;
+  final Widget Function(BuildContext context, FocusableControlState control)
+      builder;
 
   /// Called when the control is pressed.
   final VoidCallback? onPressed;
@@ -33,10 +34,12 @@ class FocusableControlBuilder extends StatefulWidget {
   final VoidCallback? onLongPressed;
 
   /// Called after the hover state has changed.
-  final void Function(BuildContext context, FocusableControlState control)? onHoverChanged;
+  final void Function(BuildContext context, FocusableControlState control)?
+      onHoverChanged;
 
   /// Called after the focus state has changed.
-  final void Function(BuildContext context, FocusableControlState control)? onFocusChanged;
+  final void Function(BuildContext context, FocusableControlState control)?
+      onFocusChanged;
 
   /// Optional: If not null, the control will be marked as a semantic button and given a label.
   final String? semanticButtonLabel;
@@ -92,6 +95,12 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   bool _wasFocused = false;
   bool get wasFocused => _wasFocused;
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   void _handleHoverChanged(v) {
     setState(() => _isHovered = v);
     widget.onHoverChanged?.call(context, this);
@@ -117,7 +126,8 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   Map<Type, Action<Intent>> _getKeyboardActions() {
     return {
       if (hasPressHandler) ...{
-        ActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
+        ActivateIntent:
+            CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
       },
       ...(widget.actions ?? {}),
     };
@@ -125,7 +135,8 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    MouseCursor defaultCursor = hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
+    MouseCursor defaultCursor =
+        hasPressHandler ? SystemMouseCursors.click : MouseCursor.defer;
     MouseCursor cursor = widget.cursor ?? defaultCursor;
 
     // Create the core FocusableActionDetector
@@ -156,7 +167,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     // Wrap gestures
     return GestureDetector(
       behavior: widget.hitTestBehavior,
-      onTap: widget.onPressed == null ? null :_handlePressed,
+      onTap: widget.onPressed == null ? null : _handlePressed,
       onLongPress: widget.onLongPressed,
       child: content,
     );
