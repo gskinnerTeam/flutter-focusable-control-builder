@@ -16,9 +16,8 @@ For more information on why you'd use these widgets, see this blog post:
 https://blog.gskinner.com/archives/2021/06/flutter-building-custom-components-with-focusableactiondetector.html
 
 ## 🔨 Installation
-```yaml
-dependencies:
-  focusable_control_builder: ^0.1.0+1
+```console
+$ flutter pub add focusable_control_builder
 ```
 
 ### ⚙ Import
