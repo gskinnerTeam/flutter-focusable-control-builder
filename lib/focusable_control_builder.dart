@@ -21,6 +21,7 @@ class FocusableControlBuilder extends StatefulWidget {
     this.autoFocus = false,
     this.descendantsAreFocusable = true,
     this.descendantsAreTraversable = true,
+    this.focusNode,
   }) : super(key: key);
 
   /// Return a widget representing the control based on the current [FocusableControlState]
@@ -68,6 +69,9 @@ class FocusableControlBuilder extends StatefulWidget {
   /// Passed along to the [FocusableActionDetector]
   final bool descendantsAreTraversable;
 
+  /// Optional. Passed along to the [FocusableActionDetector]. Otherwise, an internally managed [FocusNode] will be used.
+  final FocusNode? focusNode;
+
   @override
   State<FocusableControlBuilder> createState() => FocusableControlState();
 }
@@ -76,7 +80,7 @@ class FocusableControlBuilder extends StatefulWidget {
 /// This is passed to the builder function, and can be used to determine the current state of the control.
 class FocusableControlState extends State<FocusableControlBuilder> {
   final FocusNode _focusNode = FocusNode();
-  FocusNode get focusNode => _focusNode;
+  FocusNode get focusNode => widget.focusNode ?? _focusNode;
 
   bool _isHovered = false;
   bool get isHovered => _isHovered;
@@ -113,7 +117,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
 
   void _handlePressed() {
     if (widget.requestFocusOnPress) {
-      _focusNode.requestFocus();
+      focusNode.requestFocus();
     }
     widget.onPressed?.call();
   }
@@ -138,7 +142,7 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     // Create the core FocusableActionDetector
     Widget content = FocusableActionDetector(
       enabled: widget.enabled,
-      focusNode: _focusNode,
+      focusNode: focusNode,
       autofocus: widget.autoFocus,
       descendantsAreFocusable: widget.descendantsAreFocusable,
       descendantsAreTraversable: widget.descendantsAreTraversable,
