@@ -19,10 +19,11 @@ class CustomButton extends StatelessWidget {
       child: FocusableControlBuilder(
           onPressed: onPressed,
           builder: (_, control) {
-            Color outlineColor =
-                control.isFocused ? Colors.black : Colors.transparent;
-            Color bgColor =
-                control.isHovered ? Colors.blue.shade100 : Colors.grey.shade200;
+            Color outlineColor = control.isFocused ? Colors.black : Colors.transparent;
+            Color bgColor = control.isHovered ? Colors.blue.shade100 : Colors.grey.shade200;
+            if (control.isPressed) {
+              bgColor = Colors.blue;
+            }
             return Container(
               padding: const EdgeInsets.all(8),
               child: Text(label),

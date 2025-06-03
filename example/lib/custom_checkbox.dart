@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:focusable_control_builder/focusable_control_builder.dart';
 
 class CustomCheckbox extends StatelessWidget {
-  const CustomCheckbox(this.label, {Key? key, required this.value, required this.onChanged}) : super(key: key);
+  const CustomCheckbox(this.label, {Key? key, required this.value, required this.onChanged})
+      : super(key: key);
   final String label;
   final bool value;
   final void Function(bool value) onChanged;
@@ -42,6 +43,9 @@ class CustomCheckbox extends StatelessWidget {
 
   Container _buildCheckBg(FocusableControlState control) {
     Color? contentColor = control.isHovered ? Colors.blue : null;
+    if (control.isPressed) {
+      contentColor = Colors.blue.withValues(alpha: .6);
+    }
     return Container(
       width: 20,
       height: 20,

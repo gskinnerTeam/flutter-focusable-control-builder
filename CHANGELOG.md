@@ -1,3 +1,7 @@
+## 1.1
+* Add `isPressed`
+* Stop focus nodes leaking
+
 ## 1.0.2
 * fix can not click on parent when onPress null
 * Stop FocusNodes leaking.

@@ -84,6 +84,9 @@ class FocusableControlState extends State<FocusableControlBuilder> {
   bool _isFocused = false;
   bool get isFocused => _isFocused;
 
+  bool _isPressed = false;
+  bool get isPressed => _isPressed;
+
   bool get hasPressHandler => widget.onPressed != null;
 
   bool _wasHovered = false;
@@ -116,6 +119,10 @@ class FocusableControlState extends State<FocusableControlBuilder> {
       _focusNode.requestFocus();
     }
     widget.onPressed?.call();
+  }
+
+  void _handleTapDown(bool isDown) {
+    setState(() => _isPressed = isDown);
   }
 
   /// By default, will bind the [ActivateIntent] from the flutter SDK to the onPressed callback.
@@ -164,6 +171,9 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     return GestureDetector(
       behavior: widget.hitTestBehavior,
       onTap: widget.onPressed == null ? null : _handlePressed,
+      onTapDown: (_) => _handleTapDown(true),
+      onTapUp: (_) => _handleTapDown(false),
+      onTapCancel: () => _handleTapDown(false),
       onLongPress: widget.onLongPressed,
       child: content,
     );
