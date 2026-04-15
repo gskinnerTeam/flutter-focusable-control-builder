@@ -1,3 +1,6 @@
+## 1.2
+* Add support for 'Enter' on web
+
 ## 1.1
 * Add `isPressed`
 * Stop focus nodes leaking
