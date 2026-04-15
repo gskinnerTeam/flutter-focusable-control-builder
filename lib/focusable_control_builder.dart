@@ -125,13 +125,14 @@ class FocusableControlState extends State<FocusableControlBuilder> {
     setState(() => _isPressed = isDown);
   }
 
-  /// By default, will bind the [ActivateIntent] from the flutter SDK to the onPressed callback.
-  /// This will enable SPACE and ENTER keys on most platforms.
+  /// By default, will bind [ActivateIntent] and [ButtonActivateIntent] from the flutter SDK
+  /// to the onPressed callback. This enables SPACE and ENTER keys on all platforms including web.
   /// Also accepts additional actions provided externally.
   Map<Type, Action<Intent>> _getKeyboardActions() {
     return {
       if (hasPressHandler) ...{
         ActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
+        ButtonActivateIntent: CallbackAction<Intent>(onInvoke: (_) => _handlePressed()),
       },
       ...(widget.actions ?? {}),
     };
